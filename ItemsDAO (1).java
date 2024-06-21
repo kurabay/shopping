@@ -249,4 +249,35 @@ public class ItemsDAO {
 			return itemsList;
 		}
 
+		/*売上情報テーブルと商品情報テーブルをつなげ、
+		引数isbn、戻り値はuser_id、item_name、priceが格納されたArrayList*/
+  		public ArrayList<bean.Items>  search(String isbn){
+     			Connection con = null;
+        		Statement smt = null;
+        		ArrayList<bean.Items> list = new ArrayList<bean.Items>();
+			
+        		try {
+            		con = getConnection();
+            		smt = con.createStatement();
+            		String sql = "SELECT user_id FROM salesinfo INNER JOIN iteminfo ON salesinfo."+isbn+"=iteminfo.isbn";
+            		ResultSet rs = smt.executeQuery(sql);
+            		while(rs.next()) {
+                		bean.Items items = new bean.Items();
+                		items.setUser_id(rs.getString("user_id"));
+                		items.setItem_name(rs.getString("item_name"));
+                		items.setPrice(rs.getInt("price"));
+                		list.add(items);
+			} catch (Exception e) {
+            		throw new IllegalStateException(e);
+			} finally {
+            		if (smt != null) {
+                		try {
+                    		smt.close();
+				} catch (SQLException ignore) {}
+				}if (con != null) {
+               		 		try {
+                    				con.close();} catch (SQLException ignore) {}}
+					}return list;
+			}
+
 }
