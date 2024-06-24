@@ -1,6 +1,10 @@
 <%@page contentType="text/html; charset=UTF-8" %>
-<%@page import="java.util.ArrayList,bean.Sales"%>
+<%@page import="java.util.*,bean.*,dao.*"%>
 <%@page import="java.util.ArrayList,util.MyFormat"%>
+
+<%
+User user = (User) session.getAttribute("user");
+%>
 
 
 
@@ -19,33 +23,29 @@
 		</tr>
       </table>
       
-      <hr style="text-align:center; height:3px; background-color:black">
+      <hr style="text-align:center; height:3px; background-color:red">
       
       <div style="margin-bottom:250px">
-				<form class="inline-block" action="<%=request.getContextPath()%>/search" >
+				<form class="inline-block" action="<%=request.getContextPath()%>/searchSales" >
 		 			ユーザーID<input type="text"  name="user_id">
 		 			商品名 <input type="text"  name="item_name">
 					<input type="submit" value="検索">
 				</form>
      　 <table style="margin:auto">
 				<tr>
-					<th style="background-color:#6666ff; width:250px">日付</th>
-					<th style="background-color:#6666ff; width:250px">ユーザーID</th>
-					<th style="background-color:#6666ff; width:250px">商品名</th>
-					<th style="background-color:#6666ff; width:250px">価格</th>
+					<th style="background-color:red; width:250px">日付</th>
+					<th style="background-color:red; width:250px">ユーザーID</th>
+					<th style="background-color:red; width:250px">商品名</th>
+					<th style="background-color:red; width:250px">価格</th>
 				</tr>
 				<%
-				ItemsDAO objitemsDao = new ItemsDAO();
-				ArrayList<Sales> list =(ArrayList<Sales>)request.getAttribute("sales_list");
-				if(list != null){
-					for(int i=0;i<list.size();i++){
-						Sales sale = list.get(i);
-						SalesDAO objDao = new SalesDAO();
-						ArrayList<Items> itemlist = objitemsDao.search(sale.getIsbn());
+				ArrayList<Items> itemlist =(ArrayList<Items>)request.getAttribute("itemlist");
+				if(itemlist != null){
+					for(int i=0;i<itemlist.size();i++){
 						Items item = itemlist.get(i);
 				%>
 				<tr>
-					<td style="text-align:center; width:200px"><%=sale.getDate()%></td>
+					<td style="text-align:center; width:200px"><%=item.getSalesDate()%></td>
 					<td style="text-align:center; width:200px"><%=item.getUser_id() %></td>
 					<td style="text-align:center; width:200px"><%=item.getItem_name()%></td>
 					<td style="text-align:center; width:200px"><%=item.getPrice()%></td>
@@ -55,6 +55,7 @@
 				}else{
 				%>
 				<tr>
+					<td style="text-align:center; width:200px">&nbsp;</td>
 					<td style="text-align:center; width:200px">&nbsp;</td>
 					<td style="text-align:center; width:200px">&nbsp;</td>
 					<td style="text-align:center; width:200px">&nbsp;</td>

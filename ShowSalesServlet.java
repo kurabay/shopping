@@ -3,9 +3,9 @@ package servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import bean.Sales;
+import bean.Items;
 import bean.User;
-import dao.SalesDAO;
+import dao.ItemsDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,17 +26,20 @@ public class ShowSalesServlet extends HttpServlet {
 			request.setCharacterEncoding("UTF-8");
 
 			HttpSession session = request.getSession();
+			
 			User user = (User) session.getAttribute("user");
 			if (user == null) {
 				error = "セッション切れです。";
 				cmd = "logout";
 				return;
 			}
+			
+			
+			ItemsDAO objitemsDao = new ItemsDAO();
+			ArrayList<Items> itemlist = objitemsDao.connect();
 
-			SalesDAO objsalesDao = new SalesDAO();
-			ArrayList<Sales> saleslist = objsalesDao.selectAll();
-
-			request.setAttribute("sales_list", saleslist);
+			
+			request.setAttribute("itemlist", itemlist);
 
 		} catch (IllegalStateException e) {
 			error = "DB接続エラーのため、売り上げ状況の確認はできません。";
