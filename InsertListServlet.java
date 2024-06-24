@@ -62,6 +62,7 @@ public class InsertListServlet extends HttpServlet {
 		
 //		リクエストスコープに登録
 		request.setAttribute("insertList", list);
+		request.setAttribute("cmd", cmd);
 		
 		}catch (IllegalStateException e ) {
 			error = "DB接続エラーの為、一覧表示は行えませんでした。";
