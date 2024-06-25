@@ -15,55 +15,59 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet("/detail")
 public class DetailServlet extends HttpServlet {
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		String error = "";
 		String cmd = "";
-		
+
 		try {
 			//入力データの文字コードの指定
 			request.setCharacterEncoding("UTF-8");
-			
+
 			//①isbn、cmdの入力パラメータを取得する
 			String isbn = request.getParameter("isbn");
 			cmd = request.getParameter("cmd");
-			
+
 			//ItemsDAOをインスタンス化する
 			ItemsDAO itemsDao = new ItemsDAO();
-			
+
 			//結果の戻り値として、Itemsオブジェクトを取得する
 			Items items = itemsDao.selectByIsbn(isbn);
-			
+
 			//詳細情報のエラーチェック
-			if (item.getIsbn() == null) {
+			if (items.getIsbn() == null) {
 				if (cmd.equals("detail")) {
 					error = "表示対象の商品が存在しない為、詳細情報は表示できませんでした。";
 				}
 				cmd = "list";
 				return;
 			}
-		}catch(IllegalStateException e)	{	//DB接続エラー
+			
+			request.setAttribute("items", items);
+		} catch (IllegalStateException e) {//DB接続エラー
 			if (cmd.equals("detail")) {
 				error = "DB接続エラーの為、商品の詳細は表示できませんでした。";
 			}
 			cmd = "logout";
-			
-		}finally {
+
+		}catch (Exception e) {
+			error = "予期せぬエラーが発生しました。<br>" + e;
+			cmd = "menu";
+		} finally {
 			//エラーの有無でフォワード先を呼び分ける
 			if (error.equals("")) { //エラーがない場合
 				//cmdの値でフォワード先を呼び分ける
 				if (cmd.equals("detail")) {
 					request.getRequestDispatcher("/view/detail.jsp").forward(request, response);
-				}	
+				}
 			} else { //エラーがある場合「error.jsp」にフォワード
 				request.setAttribute("error", error);
 				request.setAttribute("cmd", cmd);
 				request.getRequestDispatcher("/view/error.jsp").forward(request, response);
 			}
-			
-			
+
 		}
 	}
 
