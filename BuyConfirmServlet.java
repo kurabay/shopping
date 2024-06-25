@@ -1,9 +1,11 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
-import bean.Sales;
+import bean.Items;
+import bean.User;
+import dao.ItemsDAO;
 import dao.SalesDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,43 +16,52 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/buyConfirm")
 public class BuyConfirmServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
-    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String error = "";
         String cmd = "";
+        User user = new User();
 
         try {
-            HttpSession session = request.getSession(false);
-            if (session == null || session.getAttribute("user") == null) {
+        	
+//        	セッション情報の取り出し
+            HttpSession session = request.getSession();
+            user = (User)session.getAttribute("user");
+            ArrayList<Items> itemsList = (ArrayList<Items>)session.getAttribute("itemsList");           
+            
+            if ( user.getUser_id() == null) {
                 throw new IllegalStateException("セッションが存在しません。もう一度ログインしてください。");
             }
-
-            @SuppressWarnings("unchecked")
-            List<Sales> cartItems = (List<Sales>) session.getAttribute("salesList");
-            if (cartItems == null || cartItems.isEmpty()) {
+                        
+            if (itemsList.size() == 0) {
                 throw new IllegalStateException("カートが空です。");
             }
 
             SalesDAO salesDao = new SalesDAO();
-            for (Sales sales : cartItems) {
-                salesDao.insert(sales);
+            ItemsDAO itemsDao = new ItemsDAO();
+            
+            request.setAttribute("oldList", itemsList);
+            
+            for (Items item : itemsList) {
+                salesDao.insert(item.getIsbn());
+                itemsDao.buyUserUpdate(user.getUser_id(), item.getIsbn());
             }
-
-            cartItems.clear();
-            session.setAttribute("salesList", cartItems);
+            
+            
+//            itemsList.clear();
+            session.setAttribute("itemsList", null);
+            
+            
 
         } catch (IllegalStateException e) {
             error = e.getMessage();
             cmd = "login";
+            
         } catch (Exception e) {
             e.printStackTrace();
             error = "購入処理中にエラーが発生しました。";
             cmd = "showCart";
+            
         } finally {
             if (error.isEmpty()) {
                 request.getRequestDispatcher("/view/buyConfirm.jsp").forward(request, response);
