@@ -4,6 +4,8 @@
 <%@ page import="bean.Sales"%>
 <%@ page import="dao.ItemsDAO"%>
 <%@ page import="bean.Items"%>
+<%@page import="java.util.,bean.,dao.*"%>
+<% User user = (User)session.getAttribute("user");%>
 
 <%
 	ArrayList<bean.Sales> sales_list = (ArrayList<bean.Sales>) request.getAttribute("sales_list");
