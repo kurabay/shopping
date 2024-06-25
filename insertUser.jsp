@@ -2,6 +2,7 @@
 <%@page import="java.util.,bean.,dao.*"%>
 <% User user = (User)session.getAttribute("user");%>
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -10,14 +11,20 @@
 </head>
 <body>
     <div id="wrap">
-        <header>
-            <h1>フリマサイト</h1>
-        </header>
-        <div id="menu"></div>
-        <div id="main">
-            <h1>アカウント作成</h1>
-            <hr>
-            <div class="form-container">
+        <h1 style="text-align: center">フリマサイト</h1>
+		<hr style="text-align: center; height: 5px; background-color: purple">
+
+		<table style="margin: auto; width: 850px; margin-left:28%">
+			<tr>
+				<td style="text-align: center; width: 500px; font-size: 35px;">アカウント作成</td>
+				<td style="width: 80px">&nbsp;</td>
+				<td style="width: 80px">&nbsp;</td>
+
+			</tr>
+		</table>
+
+	<hr style="text-align: center; height: 3px; background-color: purple">
+            <div class="form-container"; style="text-align: center; margin: auto>
                 <form action="${pageContext.request.contextPath}/insertUser" method="post">
                     <div class="form-group">
                         <label for="user_id">ユーザー名:</label>
@@ -54,9 +61,14 @@
                 <p class="error">${param.error}</p>
             </c:if>
         </div>
-        <footer>
-            神田ITスクール
-        </footer>
+       <hr
+			style="text-align: center; height: 5px; background-color: purple">
+		<table
+			style="width: 950px; text-align: left; ">
+			<tr>
+				<td>神田ITスクール</td>
+			</tr>
+		</table>
     </div>
 </body>
 </html>
