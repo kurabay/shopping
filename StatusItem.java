@@ -8,14 +8,19 @@ public class StatusItem {
 	//商品名を格納する変数
 	private String sales_id;
 	
-	//購入した人のid
+	//入金状況
 	private String payment_status;
+	
+	//発送状況
+	private String shipping_status;
+		
 	
 	//コンストラクタ定義
 	public StatusItem() {
 		this.isbn = null;
 		this.sales_id = null;
 		this.payment_status = null;
+		this.shipping_status = null;
 	}
 	
 	//	各フィールド変数のアクセサメソッド
@@ -39,7 +44,13 @@ public class StatusItem {
 	public void setPaymentStatus(String payment_status) {
 		this.payment_status = payment_status;
 	}
+	
+	public String getShippingStatus() {
+		return shipping_status;
+	}
+	public void setShippingStatus(String shipping_status) {
+		this.shipping_status = shipping_status;
+	}
+
 
 }
-	
-	
