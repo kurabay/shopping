@@ -179,218 +179,218 @@ public class UserDAO {
 		}
 		return count;
 	}
-	
+
 	//ユーザーデータ更新(更新データ表示）
-		public ArrayList<User> search(User user) {
-			ArrayList<User> userlist = new ArrayList<User>();
+	public ArrayList<User> search(User user) {
+		ArrayList<User> userlist = new ArrayList<User>();
 
-			Connection con = null;
-			Statement smt = null;
+		Connection con = null;
+		Statement smt = null;
 
-			try {
-				con = getConnection();
-				smt = con.createStatement();
+		try {
+			con = getConnection();
+			smt = con.createStatement();
 
-				//更新用SQL文
-				String sql = "UPDATE userinfo SET user_name='" + user.getUser_name() + "',user_nickname='"
-						+ user.getUser_nickname() + "',user_address='" + user.getUser_address() + "',mail='"
-						+ user.getMail() + "',phone_num='" + user.getPhone_num() + "',password='" + user.getPassword() +
-						"',authority='" + user.getAuthority() + "' WHERE user='" + user.getUser_id() + "'";
-				ResultSet rs = smt.executeQuery(sql);
+			//更新用SQL文
+			String sql = "UPDATE userinfo SET user_name='" + user.getUser_name() + "',user_nickname='"
+					+ user.getUser_nickname() + "',user_address='" + user.getUser_address() + "',mail='"
+					+ user.getMail() + "',phone_num='" + user.getPhone_num() + "',password='" + user.getPassword() +
+					"',authority='" + user.getAuthority() + "' WHERE user='" + user.getUser_id() + "'";
+			ResultSet rs = smt.executeQuery(sql);
 
-				while (rs.next()) {
-					User userupdate = new User();
+			while (rs.next()) {
+				User userupdate = new User();
 
-					userupdate.setUser_name(rs.getString("user_name"));
-					userupdate.setUser_nickname(rs.getString("user_nickname"));
-					userupdate.setUser_address(rs.getString("user_address"));
-					userupdate.setMail(rs.getString("mail"));
-					userupdate.setPhone_num(rs.getString("phone_num"));
-					userupdate.setPassword(rs.getString("password"));
-					userupdate.setAuthority(rs.getString("authority"));
+				userupdate.setUser_name(rs.getString("user_name"));
+				userupdate.setUser_nickname(rs.getString("user_nickname"));
+				userupdate.setUser_address(rs.getString("user_address"));
+				userupdate.setMail(rs.getString("mail"));
+				userupdate.setPhone_num(rs.getString("phone_num"));
+				userupdate.setPassword(rs.getString("password"));
+				userupdate.setAuthority(rs.getString("authority"));
 
-					userlist.add(userupdate);
+				userlist.add(userupdate);
 
-				}
+			}
 
-			} catch (Exception e) {
-				throw new IllegalStateException(e);
-			} finally {
-				if (smt != null) {
-					try {
-						smt.close();
-					} catch (SQLException ignre) {
-					}
-				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException ignore) {
-					}
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignre) {
 				}
 			}
-			return userlist;
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
 		}
-		
+		return userlist;
+	}
+
+	//ユーザーデータ検索
+	public ArrayList<User> search(String user_id) {
+		ArrayList<User> list = new ArrayList<User>();
+
+		Connection con = null;
+		Statement smt = null;
+
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+
+			//検索用SQL文
+			String sql = "SELECT * FROM userinfo WHERE user_id LIKE '%" + user_id + "%'";
+			ResultSet rs = smt.executeQuery(sql);
+
+			while (rs.next()) {
+				User user = new User();
+				user.setUser_id(rs.getString("user_id"));
+
+				list.add(user);
+			}
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignre) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return list;
+	}
+
+	//ユーザーデータ削除用
+	public int delete(String user_id) {
+		int count;
+
+		Connection con = null;
+		Statement smt = null;
+
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+
+			//削除用SQL文
+			String sql = "DELETE FROM userinfo WHERE user_id = '" + user_id + "'";
+
+			count = smt.executeUpdate(sql);
+
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignre) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return count;
+	}
+
 	//全ユーザー情報を取得
-        public ArrayList<User> selectAll() {
-            ArrayList<User> userlist = new ArrayList<User>();
+	public ArrayList<User> selectAll() {
+		ArrayList<User> userlist = new ArrayList<User>();
 
-            Connection con = null;
-            Statement smt = null;
-            try {
-                con = getConnection();
-                smt = con.createStatement();
+		Connection con = null;
+		Statement smt = null;
+		try {
+			con = getConnection();
+			smt = con.createStatement();
 
-                //検索用sql文
-                String sql = "SELECT * FROM userinfo";
+			//検索用sql文
+			String sql = "SELECT * FROM userinfo";
 
-                ResultSet rs = smt.executeQuery(sql);
+			ResultSet rs = smt.executeQuery(sql);
 
-                while (rs.next()) {
-                    User user = new User();
-                    user.setUser_id(rs.getString("user_id"));
-                    user.setUser_nickname(rs.getString("user_nickname"));
-                    user.setAuthority(rs.getString("authority"));
+			while (rs.next()) {
+				User user = new User();
+				user.setUser_id(rs.getString("user_id"));
+				user.setUser_nickname(rs.getString("user_nickname"));
+				user.setAuthority(rs.getString("authority"));
 
-                    userlist.add(user);
-                }
+				userlist.add(user);
+			}
 
-            } catch (Exception e) {
-                throw new IllegalStateException(e);
-            } finally {
-                if (smt != null) {
-                    try {
-                        smt.close();
-                    } catch (SQLException ignre) {
-                    }
-                }
-                if (con != null) {
-                    try {
-                        con.close();
-                    } catch (SQLException ignore) {
-                    }
-                }
-            }
-            return userlist;
-        }	
-		
-		//ユーザーデータ検索
-		public ArrayList<User> search(String user_id) {
-			ArrayList<User> list = new ArrayList<User>();
-
-			Connection con = null;
-			Statement smt = null;
-
-			try {
-				con = getConnection();
-				smt = con.createStatement();
-
-				//検索用SQL文
-				String sql = "SELECT * FROM userinfo WHERE user_id LIKE '%" + user_id + "%'";
-				ResultSet rs = smt.executeQuery(sql);
-
-				while (rs.next()) {
-					User user = new User();
-					user.setUser_id(rs.getString("user_id"));
-
-					list.add(user);
-				}
-			} catch (Exception e) {
-				throw new IllegalStateException(e);
-			} finally {
-				if (smt != null) {
-					try {
-						smt.close();
-					} catch (SQLException ignre) {
-					}
-				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException ignore) {
-					}
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignre) {
 				}
 			}
-			return list;
-		}
-		
-		//ユーザーデータ削除用
-		public int delete(String user_id) {
-			int count;
-			
-			Connection con = null;
-			Statement smt = null;
-
-			try {
-				con = getConnection();
-				smt = con.createStatement();
-
-				//削除用SQL文
-				String sql = "DELETE FROM userinfo WHERE user_id = '"+user_id+"'";
-
-				count = smt.executeUpdate(sql);
-
-			} catch (Exception e) {
-				throw new IllegalStateException(e);
-			} finally {
-				if (smt != null) {
-					try {
-						smt.close();
-					} catch (SQLException ignre) {
-					}
-				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException ignore) {
-					}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
 				}
 			}
-			return count;
 		}
-		
-		//ユーザーID、ニックネーム、権限の条件に合致する情報を取得
-	    public ArrayList<User> search(String user_id, String user_nickname, String authority) {
-	        ArrayList<User> list = new ArrayList<User>();
+		return userlist;
+	}
 
-	        Connection con = null;
-	        Statement smt = null;
-	        try {
-	            con = getConnection();
-	            smt = con.createStatement();
+	//ユーザーID、ニックネーム、権限の条件に合致する情報を取得
+	public ArrayList<User> search(String user_id, String user_nickname, String authority) {
+		ArrayList<User> list = new ArrayList<User>();
 
-	            //検索用sql文
-	            String sql = "SELECT * FROM userinfo WHERE user_id ='" + user_id + "' AND user_nickname='" + user_nickname
-	                    + "' AND authority='" + authority + "'";
+		Connection con = null;
+		Statement smt = null;
+		try {
+			con = getConnection();
+			smt = con.createStatement();
 
-	            ResultSet rs = smt.executeQuery(sql);
+			//検索用sql文
+			String sql = "SELECT * FROM userinfo WHERE user_id LIKE '%" + user_id + "%' AND user_nickname LIKE '%" + user_nickname
+					+ "%' AND authority='" + authority + "'";
 
-	            while (rs.next()) {
-	                User user = new User();
-	                user.setUser_id(rs.getString("user_id"));
-	                user.setPassword(rs.getString("user_nickname"));
-	                user.setAuthority(rs.getString("authority"));
+			ResultSet rs = smt.executeQuery(sql);
 
-	                list.add(user);
-	            }
-	        } catch (Exception e) {
-	            throw new IllegalStateException(e);
-	        } finally {
-	            if (smt != null) {
-	                try {
-	                    smt.close();
-	                } catch (SQLException ignre) {
-	                }
-	            }
-	            if (con != null) {
-	                try {
-	                    con.close();
-	                } catch (SQLException ignore) {
-	                }
-	            }
-	        }
-	        return list;
-	    }
+			while (rs.next()) {
+				User user = new User();
+				user.setUser_id(rs.getString("user_id"));
+				user.setUser_nickname(rs.getString("user_nickname"));
+				user.setAuthority(rs.getString("authority"));
+
+				list.add(user);
+			}
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignre) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return list;
+	}
 
 }
