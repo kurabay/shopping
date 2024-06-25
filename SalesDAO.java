@@ -12,7 +12,7 @@ public class SalesDAO{
 	//JDBCドライバ内部のDriverクラスパス
 	private static final String RDB_DRIVE = "org.mariadb.jdbc.Driver";
 	// 接続するMySQLデータベースパス
-	private static final String URL = "jdbc:mariadb://localhost/mybookdb";
+	private static final String URL = "jdbc:mariadb://localhost/shoppingdb";
 	// データベースのユーザー名
 	private static final String USER = "root";
 	// データベースのパスワード
@@ -105,7 +105,150 @@ public class SalesDAO{
 		}
 
 	}
+	//引数の商品データを元にDBのsalesinfoテーブルから該当商品データの入金状況更新処理を行うメソッド
+	public void payStatusUpdate (String payment_status, String sales_id ) {
+		Connection con = null;
+		Statement smt = null;
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+			String sql = "UPDATE salesinfo SET payment_status='" + payment_status + "' WHERE sales_id = '" + sales_id + "'";
+
+			smt.executeUpdate(sql);
+
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignore) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+	}
 	
+//
+//	
+//	// ログインしているユーザーが発送した商品情報を全て取得するメソッド
+//	public ArrayList<StatusItem> selectItemShipUserAll(String user_id) {
+//		
+//		Connection con = null;
+//		Statement smt = null;
+//		
+//		ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+//		
+//		//			SQL文を文字列として定義
+//		String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '" + user_id + "'";
+//		
+//		try {
+//			con = getConnection();
+//			smt = con.createStatement();
+//			
+//			//			SQL文を発行し結果セットを取得
+//			ResultSet rs = smt.executeQuery(sql);
+//			
+//			//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+//			while(rs.next()) {
+//				StatusItem status_item = new StatusItem();
+//				status_item.setIsbn(rs.getString("user_id"));
+//				status_item.setSalesId(rs.getString("sales_id"));
+//				status_item.setShippingStatus(rs.getString("shipping_status"));
+//				itemsList.add(status_item);
+//			}
+//			
+//		}catch(Exception e) {
+//			System.out.println(e);
+//			throw new IllegalStateException(e);
+//		}finally {
+//			if( smt != null) {
+//				try {smt.close();}catch(SQLException ignore) {}
+//			}
+//			if( con != null ) {
+//				try {con.close();}catch(SQLException ignore) {}
+//			}
+//		}
+//		return itemsList;
+//	}
+//	
+//	// ログインしているユーザーと配送するユーザーが同じ時に商品情報の全て取得するメソッド(ShipServlet)
+//	public ArrayList<StatusItem> selectShipUserIdAll(String user_id, String shipping_status) {
+//		
+//		Connection con = null;
+//		Statement smt = null;
+//		
+//		ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+//		
+//		//			SQL文を文字列として定義
+//		String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '" + user_id + "' AND shipping_status = '" + shipping_status + "'";
+//		
+//		try {
+//			con = getConnection();
+//			smt = con.createStatement();
+//			
+//			//			SQL文を発行し結果セットを取得
+//			ResultSet rs = smt.executeQuery(sql);
+//			
+//			//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+//			while(rs.next()) {
+//				StatusItem status_item = new StatusItem();
+//				status_item.setIsbn(rs.getString("user_id"));
+//				status_item.setSalesId(rs.getString("sales_id"));
+//				status_item.setShippingStatus(rs.getString("shipping_status"));
+//				itemsList.add(status_item);
+//			}
+//			
+//		}catch(Exception e) {
+//			System.out.println(e);
+//			throw new IllegalStateException(e);
+//		}finally {
+//			if( smt != null) {
+//				try {smt.close();}catch(SQLException ignore) {}
+//			}
+//			if( con != null ) {
+//				try {con.close();}catch(SQLException ignore) {}
+//			}
+//		}
+//		return itemsList;
+//	}
+//
+//	
+	//引数の商品データを元にDBのsalesinfoテーブルから該当商品データの発送状況の更新処理を行うメソッド
+	public void shipStatusUpdate (String shipping_status, String sales_id ) {
+		Connection con = null;
+		Statement smt = null;
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+			String sql = "UPDATE salesinfo SET shipping_status='" + shipping_status + "' WHERE sales_id = '" + sales_id + "'";
+
+			smt.executeUpdate(sql);
+
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignore) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+	}
+	
+		
 	//絞り込み検索処理
 	public ArrayList<bean.Sales> search(int salesId,  String salesDate, String isbn, String shippingStatus, String paymentStatus){
 		Connection con = null;
