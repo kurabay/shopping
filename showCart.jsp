@@ -3,6 +3,9 @@
 <%@ page import="bean.Sales"%>
 <%@ page import="dao.ItemsDAO"%>
 <%@ page import="bean.Items"%>
+<%@page import="java.util.,bean.,dao.*"%>
+<% User user = (User)session.getAttribute("user");%>
+
 <!DOCTYPE html>
 <html>
 <head>
