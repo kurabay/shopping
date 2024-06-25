@@ -1,5 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%@page import="bean.*, java.util.*"%>
+<%@page import="java.util.,bean.,dao.*"%>
+<% User user = (User)session.getAttribute("user");%>
 
 <%
 ArrayList<StatusItem> sales_list = (ArrayList<StatusItem>) request.getAttribute("salesList");
