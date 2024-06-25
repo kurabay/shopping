@@ -30,7 +30,7 @@ if(userCookie != null){
    </head>
    <body style="text-align:center">
       <h1 style="text-align:center">フリマサイト</h1>
-      <hr style="text-align:center; height:5px; background-color:blue"><br>
+      <hr style="text-align:center; height:5px; background-color:blue">
       <h2 style="text-align:center">ログイン画面</h2>
       <hr style="text-align:center; height:2px; background-color:black">
       
@@ -51,7 +51,7 @@ if(userCookie != null){
          
          
                <th colspan="2"> <input type="submit" name="login" value="ログイン"></input></th><br>
-         		<th><td style="text-align:center"><a href="<%=request.getContextPath() %>/insertUser">【アカウント作成】</a></td></th>
+         		<th><td style="text-align:center"><a href="<%=request.getContextPath() %>/view/insertUser.jsp">【アカウント作成】</a></td></th>
              
           </form>
           </div>
@@ -65,7 +65,7 @@ if(userCookie != null){
          	}
       %>
       <hr style="text-align:center; height:5px; background-color:blue">
-	 <table  style="margin:auto; border:0; width:950px; text-align:left">
+      <table  style="margin:auto; border:0; width:950px; text-align:left">
 			<tr><td>神田ITスクール</td></tr>
 	</table>
    </body>
