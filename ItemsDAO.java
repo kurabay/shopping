@@ -8,13 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import bean.Items;
-import bean.Sales;
-import bean.Status;
+import bean.StatusItem;
 
 public class ItemsDAO {
 	
 	private static String RDB_DRIVE = "org.mariadb.jdbc.Driver";
-	private static String URL = "jdbc:mariadb://localhost/mybookdb";
+	private static String URL = "jdbc:mariadb://localhost/shoppingdb";
 	private static String USER = "root";
 	private static String PASSWD = "root123";
 	
@@ -26,6 +25,7 @@ public class ItemsDAO {
 			con = DriverManager.getConnection(URL, USER, PASSWD);
 			return con;
 		} catch (Exception e) {
+			System.out.println(e);
 			throw new IllegalStateException(e);
 		}
 	}
@@ -73,6 +73,175 @@ public class ItemsDAO {
 			}
 			return itemsList;
 		}
+		
+		// ログインしているユーザーが買った商品情報を全て取得するメソッド
+		public ArrayList<StatusItem> selectItemUserAll(String user_id) {
+			
+			Connection con = null;
+			Statement smt = null;
+			
+			ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+			
+			//SQL文を文字列として定義
+			String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '" + user_id + "'";
+			
+			try {
+				con = getConnection();
+				smt = con.createStatement();
+				
+				//SQL文を発行し結果セットを取得
+				ResultSet rs = smt.executeQuery(sql);
+				
+				//書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+				while(rs.next()) {
+					StatusItem status_item = new StatusItem();
+					status_item.setIsbn(rs.getString("isbn"));
+					status_item.setSalesId(rs.getString("sales_id"));
+					status_item.setPaymentStatus(rs.getString("payment_status"));
+					itemsList.add(status_item);
+				}
+				
+			}catch(Exception e) {
+				System.out.println(e);
+				throw new IllegalStateException(e);
+			}finally {
+				if( smt != null) {
+					try {smt.close();}catch(SQLException ignore) {}
+				}
+				if( con != null ) {
+					try {con.close();}catch(SQLException ignore) {}
+				}
+			}
+			return itemsList;
+		}
+		
+		// ログインしているユーザーと入金するユーザーが同じ時に商品情報の全て取得するメソッド
+		public ArrayList<StatusItem> selectUserIdAll(String user_id, String payment_status) {
+			
+			Connection con = null;
+			Statement smt = null;
+			
+			ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+			
+			//			SQL文を文字列として定義
+			String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '" + user_id + "' AND payment_status = '" + payment_status + "'";
+			
+			try {
+				con = getConnection();
+				smt = con.createStatement();
+				
+				//			SQL文を発行し結果セットを取得
+				ResultSet rs = smt.executeQuery(sql);
+				
+				//商品データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+				while(rs.next()) {
+					StatusItem status_item = new StatusItem();
+					status_item.setIsbn(rs.getString("isbn"));
+					status_item.setSalesId(rs.getString("sales_id"));
+					status_item.setPaymentStatus(rs.getString("payment_status"));
+					itemsList.add(status_item);
+				}
+				
+			}catch(Exception e) {
+				System.out.println(e);
+				throw new IllegalStateException(e);
+			}finally {
+				if( smt != null) {
+					try {smt.close();}catch(SQLException ignore) {}
+				}
+				if( con != null ) {
+					try {con.close();}catch(SQLException ignore) {}
+				}
+			}
+			return itemsList;
+		}
+
+		
+
+		
+		// ログインしているユーザーが発送した商品情報を全て取得するメソッド
+		public ArrayList<StatusItem> selectItemShipUserAll(String user_id) {
+			
+			Connection con = null;
+			Statement smt = null;
+			
+			ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+			
+			//			SQL文を文字列として定義
+			String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '" + user_id + "'";
+			
+			try {
+				con = getConnection();
+				smt = con.createStatement();
+				
+				//			SQL文を発行し結果セットを取得
+				ResultSet rs = smt.executeQuery(sql);
+				
+				//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+				while(rs.next()) {
+					StatusItem status_item = new StatusItem();
+					status_item.setIsbn(rs.getString("isbn"));
+					status_item.setSalesId(rs.getString("sales_id"));
+					status_item.setShippingStatus(rs.getString("shipping_status"));
+					itemsList.add(status_item);
+				}
+				
+			}catch(Exception e) {
+				System.out.println(e);
+				throw new IllegalStateException(e);
+			}finally {
+				if( smt != null) {
+					try {smt.close();}catch(SQLException ignore) {}
+				}
+				if( con != null ) {
+					try {con.close();}catch(SQLException ignore) {}
+				}
+			}
+			return itemsList;
+		}
+		
+		// ログインしているユーザーと配送するユーザーが同じ時に商品情報の全て取得するメソッド(ShipServlet)
+		public ArrayList<StatusItem> selectShipUserIdAll(String user_id, String shipping_status) {
+			
+			Connection con = null;
+			Statement smt = null;
+			
+			ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+			
+			//			SQL文を文字列として定義
+			String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '" + user_id + "' AND salesinfo.shipping_status = '" + shipping_status + "'";
+			
+			try {
+				con = getConnection();
+				smt = con.createStatement();
+				
+				//			SQL文を発行し結果セットを取得
+				ResultSet rs = smt.executeQuery(sql);
+				
+				//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+				while(rs.next()) {
+					StatusItem status_item = new StatusItem();
+					status_item.setIsbn(rs.getString("isbn"));
+					status_item.setSalesId(rs.getString("sales_id"));
+					status_item.setShippingStatus(rs.getString("shipping_status"));
+					itemsList.add(status_item);
+				}
+				
+			}catch(Exception e) {
+				System.out.println(e);
+				throw new IllegalStateException(e);
+			}finally {
+				if( smt != null) {
+					try {smt.close();}catch(SQLException ignore) {}
+				}
+				if( con != null ) {
+					try {con.close();}catch(SQLException ignore) {}
+				}
+			}
+			return itemsList;
+		}
+
+		
 		
 		//引数で与えられた商品情報を、商品データを格納するitemsinfoテーブルへ登録するメソッド
 		public void insert(Items items) {
@@ -250,97 +419,34 @@ public class ItemsDAO {
 			}
 			return itemsList;
 		}
-
-		public ArrayList<Status> selectItemUserAll(String sample_id) {
-			return null;
-		}
 		
-		public ArrayList<Sales> selectAllSales() {
-			Connection con = null;
-			Statement smt = null;
-			
-			ArrayList<Sales> sales_list = new ArrayList<Sales>();
-			
-
-			try {
-				con = getConnection();
-				smt = con.createStatement();
-				
-				String sql = "SELECT i.item_name, i.price, s.sales_date, s.isbn FROM itemsinfo i INNER JOIN salesinfo s ON i.isbn=s.isbn";
-				ResultSet rs = smt.executeQuery(sql);
-
-				while (rs.next()) {
-					Sales sales = new Sales();
-					sales.setIsbn(rs.getString("isbn"));
-					sales.setPrice(rs.getInt("price"));
-					sales.setSalesDate(rs.getString("sales_date"));
-					sales.setItemName(rs.getString("item_name"));
-
-					sales_list.add(sales);
-				}
-			
-			} catch (Exception e) {
-				throw new IllegalStateException(e);
-			} finally {
-				if (smt != null) {
-					try {
-						smt.close();
-					} catch (SQLException ignore) {
-					}
-				}
-				if (con != null) {
-					try {
-						con.close();
-					} catch (SQLException ignore) {
-					}
-				}
-			}
-			return sales_list;
-		}
-		
-		/*
-	     
-		売上情報テーブルと商品情報テーブルをつなげ、
-		戻り値はuser_id、item_name、priceが格納されたArrayList*/
-		public ArrayList<bean.Items> connect() {
-		    Connection con = null;
-		    Statement smt = null;
-		    ArrayList<bean.Items> list = new ArrayList<bean.Items>();
-
-		        try {
-		            con = getConnection();
-		            smt = con.createStatement();
-
-		            //ISBNでitemsinfoとsalesinfoを接続、
-		            String sql = "SELECT * FROM salesinfo INNER JOIN itemsinfo ON salesinfo.isbn=itemsinfo.isbn";
-
-		            ResultSet rs = smt.executeQuery(sql);
-
-		            while (rs.next()) {
-		                bean.Items items = new bean.Items();
-		                items.setSalesDate(rs.getString("salesDate"));
-		                items.setUser_id(rs.getString("user_id"));
-		                items.setItem_name(rs.getString("item_name"));
-		                items.setPrice(rs.getInt("price"));
-		                list.add(items);
-		            }
-		        } catch (Exception e) {
-		            throw new IllegalStateException(e);
-		        } finally {
-		            if (smt != null) {
-		                try {
-		                    smt.close();
-		                } catch (SQLException ignore) {
-		                }
-		            }
-		            if (con != null) {
-		                try {
-		                    con.close();
-		                } catch (SQLException ignore) {
-		                }
-		            }
-		        }
-		        return list;
-		    }
+		//購入者の情報を更新するメソッド
+	      public void buyUserUpdate(String buy_id, String isbn) {
+	          Connection con = null;
+	          Statement smt = null;
+	          try {
+	              con = getConnection();
+	              smt = con.createStatement();
+	              String sql = "UPDATE itemsinfo SET buy_id='"+ buy_id +"' WHERE isbn = '"+ isbn + "'";
+	
+	              smt.executeUpdate(sql);
+	
+	          } catch (Exception e) {
+	              throw new IllegalStateException(e);
+	          } finally {
+	              if (smt != null) {
+	                  try {
+	                      smt.close();
+	                  } catch (SQLException ignore) {
+	                  }
+	              }
+	              if (con != null) {
+	                  try {
+	                      con.close();
+	                  } catch (SQLException ignore) {
+	                  }
+	              }
+	          }
+	      }
 
 }

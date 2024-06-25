@@ -22,8 +22,9 @@ public class Items {
 	
 	//備考を格納する変数
 	private String remark;
-
-	private String salesdate;
+	
+	//購入した人のid
+	private String buy_id;
 	
 	//コンストラクタ定義
 	public Items() {
@@ -34,6 +35,7 @@ public class Items {
 		this.type = null;
 		this.price = 0;
 		this.remark = null;
+		this.buy_id = null;
 	}
 	
 //	各フィールド変数のアクセサメソッド
@@ -85,12 +87,12 @@ public class Items {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
-	public String getSalesdate() {
-		return salesdate;
+	
+	public String getBuyId() {
+		return buy_id;
 	}
-	public void setSalesDate(String salesdate) {
-		this.salesdate = salesdate;
+	public void setBuyId(String buy_id) {
+		this.buy_id = buy_id;
 	}
 	
 	
