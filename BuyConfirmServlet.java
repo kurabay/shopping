@@ -18,7 +18,7 @@ import util.SendMail; // インポートが正しいか確認
 @WebServlet("/buyConfirm")
 public class BuyConfirmServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String error = "";
         String cmd = "";
         User user = new User();
