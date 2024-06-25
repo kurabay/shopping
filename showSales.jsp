@@ -1,10 +1,9 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="java.util.*,bean.*,dao.*"%>
 <%@page import="java.util.ArrayList,util.MyFormat"%>
+<%@page import="java.util.,bean.,dao.*"%>
 
-<%
-User user = (User) session.getAttribute("user");
-%>
+<%User user = (User) session.getAttribute("user");%>
 
 
 
