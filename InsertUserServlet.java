@@ -33,21 +33,15 @@ public class InsertUserServlet extends HttpServlet {
         String mail = request.getParameter("mail");
         String phone_num = request.getParameter("phone_num");
         String password = request.getParameter("password");
-        String authority = request.getParameter("authority");
+        String authority = "";
 
-        // デバッグのためにフォームデータを出力
-        System.out.println("user_id: " + user_id);
-        System.out.println("user_name: " + user_name);
-        System.out.println("user_nickname: " + user_nickname);
-        System.out.println("user_address: " + user_address);
-        System.out.println("mail: " + mail);
-        System.out.println("phone_num: " + phone_num);
-        System.out.println("password: " + password);
-        System.out.println("authority: " + authority);
+        UserDAO userDAO = new UserDAO();
 
-        // フォームデータの検証
-        if (user_id == null || user_id.isEmpty()) {
-            response.sendRedirect("insertUser.jsp?error=User ID is required.");
+        // ユーザーIDの重複を確認
+        if (userDAO.isUserIdExists(user_id)) {
+            request.setAttribute("errorMessage", "ユーザーIDは既に存在します。");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("view/insertUser.jsp");
+            dispatcher.forward(request, response);
             return;
         }
 
@@ -63,13 +57,14 @@ public class InsertUserServlet extends HttpServlet {
         user.setAuthority(authority);
 
         // データベースに接続してユーザー情報を保存
-        UserDAO userDAO = new UserDAO();
         int result = userDAO.insert(user);
 
         if (result > 0) {
             response.sendRedirect("view/login.jsp");
         } else {
-            response.sendRedirect("insertUser.jsp?error=Failed to create user.");
+            request.setAttribute("errorMessage", "ユーザーの作成に失敗しました。");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("view/insertUser.jsp");
+            dispatcher.forward(request, response);
         }
     }
 }
