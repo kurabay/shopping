@@ -22,13 +22,12 @@ User user = (User)session.getAttribute("user");
 			<% 
 				if ( user.getAuthority().equals("1")){
 			%>
-			<div id="menu-user">
+			<div id="menu">
 				<div class="container">
 					<!-- ナビゲーション  -->
 					<div id="nav">
 						<ul>
 							<li><a href ="<%=request.getContextPath()%>/view/menu.jsp" >[メニュー]</a></li>
-							<li><a href ="<%=request.getContextPath()%>/view/insert.jsp">[出品登録]</a></li>
 						</ul>
 					</div>
 
@@ -38,6 +37,7 @@ User user = (User)session.getAttribute("user");
 					</div>
 				</div>
 			</div>
+			<hr style="text-align:center; height:2px; background-color:red">
 			
 				<!-- 検索フォーム -->
 			<div style="display: flex; margin-left: 15%;">
@@ -67,15 +67,15 @@ User user = (User)session.getAttribute("user");
 				</form>
 			</div>
 
-				<!-- ユーザー用書籍情報リスト -->
+				<!-- 管理者用書籍情報リスト -->
 				
 				<table>
 						<tr>
-							<th style="background-color:red; width:250px">ユーザーID</th>
-							<th style="background-color:red; width:250px">ISBN</th>
-							<th style="background-color:red; width:250px">商品名</th>
-							<th style="background-color:red; width:250px">種類</th>
-							<th style="background-color:red; width:250px">価格</th>
+							<th style="background-color:#ff6347; width:250px">ユーザーID</th>
+							<th style="background-color:#ff6347; width:250px">ISBN</th>
+							<th style="background-color:#ff6347; width:250px">商品名</th>
+							<th style="background-color:#ff6347; width:250px">種類</th>
+							<th style="background-color:#ff6347; width:250px">価格</th>
 						</tr>
 					
 					<tbody>
@@ -103,7 +103,7 @@ User user = (User)session.getAttribute("user");
 					
 					<%}else{ %>	
 					
-			<div id="menu-user">
+			<div id="menu">
 				<div class="container">
 					<!-- ナビゲーション  -->
 					<div id="nav">
@@ -119,6 +119,7 @@ User user = (User)session.getAttribute("user");
 					</div>
 				</div>
 			</div>
+			<hr style="text-align:center; height:2px; background-color:blue">
 			
 				<!-- 検索フォーム -->
 			<div style="display: flex; margin-left: 15%;">
@@ -152,12 +153,12 @@ User user = (User)session.getAttribute("user");
 				
 				<table>
 						<tr>
-							<th style="background-color:blue; width:250px">ユーザーID</th>
-							<th style="background-color:blue; width:250px">ISBN</th>
-							<th style="background-color:blue; width:250px">商品名</th>
-							<th style="background-color:blue; width:250px">種類</th>
-							<th style="background-color:blue; width:250px">価格</th>
-							<th style="background-color:blue; width:250px">カートに入れる</th>
+							<th style="background-color:#6666ff; width:250px">ユーザーID</th>
+							<th style="background-color:#6666ff; width:250px">ISBN</th>
+							<th style="background-color:#6666ff; width:250px">商品名</th>
+							<th style="background-color:#6666ff; width:250px">種類</th>
+							<th style="background-color:#6666ff; width:250px">価格</th>
+							<th style="background-color:#6666ff; width:250px">カートに入れる</th>
 						</tr>
 					
 					<tbody>
