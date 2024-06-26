@@ -1,10 +1,9 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%@page import="bean.*, java.util.*"%>
-<%@page import="java.util.,bean.,dao.*"%>
-<% User user = (User)session.getAttribute("user");%>
 
 <%
 ArrayList<StatusItem> sales_list = (ArrayList<StatusItem>) request.getAttribute("salesList");
+User user = (User)session.getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -12,11 +11,12 @@ ArrayList<StatusItem> sales_list = (ArrayList<StatusItem>) request.getAttribute(
     <head>
         <meta charset"UTF-8">
         <title>発送状況</title>
+        <link rel="stylesheet"  href="<%=request.getContextPath()%>/css/style.css">
     </head>
     <body>
-        <h1 style="text-align:center">フリマサイト</h1>
-        <hr style="text-align:center; height:5px; background-color:blue">
-        
+        <!--ヘッダー部分  -->
+			<%@ include file="/common/header.jsp" %>
+			
 		<table  style="margin:auto; width:850px;">
 		<tr>
 		   	<td style="text-align:center; width:80px">[<a href="<%=request.getContextPath()%>/view/menu.jsp">メニュー</a>]</td>
@@ -27,7 +27,7 @@ ArrayList<StatusItem> sales_list = (ArrayList<StatusItem>) request.getAttribute(
 		
 		</table>
 		
-		<hr style="text-align:center; height:3px; background-color:black">
+		<hr style="text-align:center; height:2px; background-color:blue">
 		
 	<div style="text-align: center;">
 		<div style="margin: 3% 60% 1%;">

@@ -75,6 +75,7 @@
 		<div style="text-align: center; margin: auto; width: 850px;">
 			<a href="<%=request.getContextPath()%>/list">【出品一覧】</a><br> <a
 				href="<%=request.getContextPath()%>/view/insert.jsp">【商品登録】</a><br>
+			<a href="<%=request.getContextPath()%>/insertList">【登録商品一覧】</a><br>
 			<a href="<%=request.getContextPath()%>/showCart">【カート表示】</a><br>
 			<a href="<%=request.getContextPath()%>/payment">【入金状況】</a><br> <a
 				href="<%=request.getContextPath()%>/ship">【発送状況】</a><br> <a
