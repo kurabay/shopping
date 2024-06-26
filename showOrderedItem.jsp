@@ -4,17 +4,18 @@
 <%@ page import="bean.Sales"%>
 <%@ page import="dao.ItemsDAO"%>
 <%@ page import="bean.Items"%>
-<%@page import="java.util.,bean.,dao.*"%>
-<% User user = (User)session.getAttribute("user");%>
 
 <%
 	ArrayList<bean.Sales> sales_list = (ArrayList<bean.Sales>) request.getAttribute("sales_list");
+	User user = (User)session.getAttribute("user");
 %>
 <html>
 	<head>
 		<title>フリマサイト</title>
 	</head>
 	<body>
+		<!--ヘッダー部分  -->
+			<%@ include file="/common/header.jsp" %>
 		<h1 style="text-align:center">購入履歴</h1>
 
 		
@@ -55,7 +56,10 @@
 
 			</table>
 		</div>
-
-		</table>
+		<hr style="text-align:center; height:5px; background-color:blue">
+	 <table  style="margin:auto; border:0; width:950px; text-align:left">
+			<tr><td>神田ITスクール</td></tr>
+	</table>
+		
 	</body>
 </html>
