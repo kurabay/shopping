@@ -11,8 +11,8 @@
       <title>ユーザー一覧画面</title>
    </head>
    <body>
-      <h1 style="text-align:center">フリマサイト</h1>
-      <hr style="text-align:center; height:5px; background-color:red">
+      <!--ヘッダー部分  -->
+			<%@ include file="/common/header.jsp" %>
       <table  style="margin:auto; width:850px;">
 		<tr>
 		   <td style="text-align:center; width:80px">[<a href="<%=request.getContextPath() %>/view/menu.jsp">メニュー</a>]</td>
@@ -27,7 +27,7 @@
          <table style="margin:auto">
             <tr>
                <td>
-                 <form action="<%=request.getContextPath() %>/search">
+                 <form action="<%=request.getContextPath() %>/searchUser">
                     ユーザーID:<input type="text" size="30" name="user_id"></input>
                     ニックネーム:<input type="text" size="30" name="user_nickname"></input>
                     権限:<input type="text" size="30" name="authority"></input>
@@ -44,9 +44,9 @@
          
          <table style="margin:auto">
 				<tr>
-					<th style="background-color:red; width:250px">ユーザーID</th>
-					<th style="background-color:red; width:250px">ニックネーム</th>
-					<th style="background-color:red; width:250px">権限</th>
+					<th style="background-color:#ff6347; width:250px">ユーザーID</th>
+					<th style="background-color:#ff6347; width:250px">ニックネーム</th>
+					<th style="background-color:#ff6347; width:250px">権限</th>
 				</tr>
 				<%
 				ArrayList<User> userList =(ArrayList<User>)request.getAttribute("user_list");

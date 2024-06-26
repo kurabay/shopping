@@ -3,13 +3,8 @@
 <%@ page import="bean.Sales"%>
 <%@ page import="dao.ItemsDAO"%>
 <%@ page import="bean.Items"%>
-<%@ page import="bean.User"%>
-<%
-User user = (User) session.getAttribute("user");
-ArrayList<Items> itemsList = (ArrayList<Items>) session.getAttribute("itemsList");
-%>
-
 <!DOCTYPE html>
+
 <html>
 <head>
 <title>ショッピングカート</title>
@@ -23,30 +18,32 @@ ArrayList<Items> itemsList = (ArrayList<Items>) session.getAttribute("itemsList"
 </style>
 </head>
 <body>
-	<!-- 共通ヘッダーのインクルード -->
-	<%@ include file="/common/header.jsp"%>
-
+	<!--ヘッダー部分  -->
+			<%@ include file="/common/header.jsp" %>
+	
 	<div id="wrap">
-
-		<ul id="nav">
-			<li><a href="<%=request.getContextPath()%>/view/menu.jsp">メニュー</a></li>
-			<li><a href="<%=request.getContextPath()%>/list">出品一覧</a></li>
-		</ul>
+		<div id="menu">
+			<ul id="nav">
+				<li><a href="<%=request.getContextPath()%>/view/menu.jsp">メニュー</a></li>
+				<li><a href="<%=request.getContextPath()%>/list">出品一覧</a></li>
+			</ul>
+		</div>
 
 		<div id="main">
 			<div id="page_title">
 				<h2 id="page_title">カート表示</h2>
 			</div>
+			<hr style="text-align:center; height:2px; background-color:blue">
 			<%
-			if (itemsList != null && itemsList.size() != 0) {
+			ArrayList<Items> itemsList = (ArrayList<Items>) session.getAttribute("itemsList");
+			if (itemsList.size() != 0) {
 			%>
-
 			<table class="list-table">
 				<thead>
 					<tr>
-						<th style="background-color: blue; width: 250px">商品名</th>
-						<th style="background-color: blue; width: 250px">種類</th>
-						<th style="background-color: blue; width: 250px">価格</th>
+						<th style="background-color: #6666ff; width: 250px">商品名</th>
+						<th style="background-color: #6666ff; width: 250px">種類</th>
+						<th style="background-color: #6666ff; width: 250px">価格</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -76,9 +73,12 @@ ArrayList<Items> itemsList = (ArrayList<Items>) session.getAttribute("itemsList"
 			}
 			%>
 		</div>
+		<hr style="text-align: center; height: 5px; background-color: blue">
+		<table style="margin: auto; border: 0; width: 950px; text-align: left">
+			<tr>
+				<td>神田ITスクール</td>
+			</tr>
+		</table>
 	</div>
-
-	<!-- 共通フッターのインクルード -->
-	<%@ include file="/common/footer.jsp"%>
 </body>
 </html>

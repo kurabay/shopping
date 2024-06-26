@@ -27,16 +27,16 @@
 			</tr>
 		</table>
 			
-		<hr style="height:2; background-color:#000000" />
+		<hr style="height:2; background-color:blue" />
 		<div style="margin:auto">
 		
 			<table style="margin:auto; margin-top:1%; margin-bottom:10%">
 				
 							<tr>
-								<th style="text-align:center; background-color:#0000FF; width:200px">商品名</th>
-								<th style="text-align:center; background-color:#0000FF; width:200px">種類</th>
-								<th style="text-align:center; background-color:#0000FF; width:200px">価格</th>
-								<th style="text-align:center; background-color:#0000FF; width:200px">注文日</th>
+								<th style="text-align:center; background-color:#6666ff; width:250px">商品名</th>
+								<th style="text-align:center; background-color:#6666ff; width:250px">種類</th>
+								<th style="text-align:center; background-color:#6666ff; width:250px">価格</th>
+								<th style="text-align:center; background-color:#6666ff; width:250px">注文日</th>
 							</tr>
 									<%
 					if (sales_list != null) {
