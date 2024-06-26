@@ -1,10 +1,9 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%@page import="java.util.ArrayList,bean.*"%>
-<%@page import="java.util.,bean.,dao.*"%>
-<%User user = (User)session.getAttribute("user");%>
 
 <%
 ArrayList<Items> itemslist = (ArrayList<Items>) request.getAttribute("oldList");
+User user = (User) session.getAttribute("user");
 %>
 
 <html>
@@ -36,7 +35,8 @@ ArrayList<Items> itemslist = (ArrayList<Items>) request.getAttribute("oldList");
 					</div>
 				</div>
 			</div>
-
+			<hr style="text-align:center; height:2px; background-color:blue">
+			
 			<!-- 商品一覧のコンテンツ部分 -->
 			<div id="main" class="container">
 			<p>下記の商品を購入しました。<br>ご利用ありがとうございました。</p>
