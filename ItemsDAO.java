@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.ObjectInputFilter.Status;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -91,9 +90,9 @@ public class ItemsDAO {
 			con = getConnection();
 			smt = con.createStatement();
 			String sql = "INSERT INTO itemsinfo VALUES('" + items.getUser_id() + "','" + items.getIsbn() + "','"
-					+ items.getItem_name() + "','" + items.getItem_kana() + "',' " + items.getItem_kana() + "',' "
-					+ items.getType() + "'," + items.getPrice() + ",'" + items.getBuy_id() + "',"
-					+ items.getRemark() + " )";
+					+ items.getItem_name() + "','" + items.getItem_kana() + "',' "
+					+ items.getType() + "'," + items.getPrice() + ",'" + items.getBuy_id() + "','"
+					+ items.getRemark() + " ')";
 
 			smt.executeUpdate(sql);
 
@@ -221,7 +220,7 @@ public class ItemsDAO {
 
 	// 引数の各データを基にDBの商品情報を格納するitemsinfoテーブルから該当書籍データの絞込み検索処理をおこなうメソッド
 	public ArrayList<Items> search(String user_id, String isbn, String item_name, String item_kana, String type,
-			String price, String buy_id, String remark) {
+			int price, String buy_id, String remark) {
 		Connection con = null;
 		Statement smt = null;
 		ArrayList<Items> itemsList = new ArrayList<Items>();
@@ -229,10 +228,10 @@ public class ItemsDAO {
 			con = getConnection();
 			smt = con.createStatement();
 
-			String sql = "SELECT user_id,isbn,item_name,item_kana,type,price,remark FROM itemsinfo " +
-					"WHERE user_id LIKE '%" + user_id + "%' AND isbn LIKE '%" + isbn + "%' AND item_name LIKE '%"
-					+ item_name + "%' AND item_kana LIKE '%" + item_kana + "%'"
-					+ "AND type LIKE '%" + type + "%' AND price LIKE '%" + price + "%' AND remark LIKE '%" + buy_id
+			String sql = "SELECT * FROM itemsinfo WHERE user_id LIKE '%" + user_id + "%' AND isbn LIKE '%" + isbn
+					+ "%' AND item_name LIKE '%"
+					+ item_name + "%' AND item_kana LIKE '%" + item_kana + "%' AND type LIKE '%" + type
+					+ "%' AND price >=" + price + " AND buy_id LIKE '%" + buy_id
 					+ "%' AND remark LIKE '%" + remark
 					+ "%'";
 
@@ -395,8 +394,8 @@ public class ItemsDAO {
 		try {
 			con = getConnection();
 			smt = con.createStatement();
-			String sql = "SELECT * FROM salesinfo INNER JOIN itemsinfo ON salesinfo.isbn=itemsinfo.isbn WHERE itemsinfo.user_id = '"
-					+ user_id + "' AND itemsinfo.item_name = '" + item_name + "'";
+			String sql = "SELECT * FROM salesinfo INNER JOIN itemsinfo ON salesinfo.isbn=itemsinfo.isbn WHERE itemsinfo.user_id LIKE '%"
+					+ user_id + "%' AND itemsinfo.item_name LIKE '%" + item_name + "%'";
 
 			ResultSet rs = smt.executeQuery(sql);
 
@@ -427,132 +426,199 @@ public class ItemsDAO {
 		return list;
 	}
 
-	public ArrayList<Status> selectItemUserAll(String sample_id) {
-		return null;
-	}
+	//userが購入した商品情報を取得
+    public ArrayList<StatusItem> selectItemUserAll(String user_id) {
+        Connection con = null;
+        Statement smt = null;
+
+        ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+
+        //            SQL文を文字列として定義
+        String sql = "SELECT * FROM itemsinfo INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '"
+                + user_id + "' ";
+        try {
+            con = getConnection();
+            smt = con.createStatement();
+
+            //            SQL文を発行し結果セットを取得
+            ResultSet rs = smt.executeQuery(sql);
+
+            //            書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+            while (rs.next()) {
+                StatusItem status_item = new StatusItem();
+                status_item.setIsbn(rs.getString("isbn"));
+                status_item.setSalesId(rs.getString("item_name"));
+                status_item.setPaymentStatus(rs.getString("payment_status"));
+                itemsList.add(status_item);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new IllegalStateException(e);
+        } finally {
+            if (smt != null) {
+                try {
+                    smt.close();
+                } catch (SQLException ignore) {
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ignore) {
+                }
+            }
+        }
+        return itemsList;
+    }
+
+
+
+
 	
+
 	// ログインしているユーザーと配送するユーザーが同じ時に商品情報の全て取得するメソッド(ShipServlet)
-			public ArrayList<StatusItem> selectShipUserIdAll(String user_id, String shipping_status) {
-				
-				Connection con = null;
-				Statement smt = null;
-				
-				ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
-				
-				//			SQL文を文字列として定義
-				String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '" + user_id + "' AND salesinfo.shipping_status = '" + shipping_status + "'";
-				
-				try {
-					con = getConnection();
-					smt = con.createStatement();
-					
-					//			SQL文を発行し結果セットを取得
-					ResultSet rs = smt.executeQuery(sql);
-					
-					//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
-					while(rs.next()) {
-						StatusItem status_item = new StatusItem();
-						status_item.setIsbn(rs.getString("isbn"));
-						status_item.setSalesId(rs.getString("sales_id"));
-						status_item.setShippingStatus(rs.getString("shipping_status"));
-						itemsList.add(status_item);
-					}
-					
-				}catch(Exception e) {
-					System.out.println(e);
-					throw new IllegalStateException(e);
-				}finally {
-					if( smt != null) {
-						try {smt.close();}catch(SQLException ignore) {}
-					}
-					if( con != null ) {
-						try {con.close();}catch(SQLException ignore) {}
-					}
-				}
-				return itemsList;
-			}
-			
-			// ログインしているユーザーが発送した商品情報を全て取得するメソッド
-			public ArrayList<StatusItem> selectItemShipUserAll(String user_id) {
-				
-				Connection con = null;
-				Statement smt = null;
-				
-				ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
-				
-				//			SQL文を文字列として定義
-				String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '" + user_id + "'";
-				
-				try {
-					con = getConnection();
-					smt = con.createStatement();
-					
-					//			SQL文を発行し結果セットを取得
-					ResultSet rs = smt.executeQuery(sql);
-					
-					//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
-					while(rs.next()) {
-						StatusItem status_item = new StatusItem();
-						status_item.setIsbn(rs.getString("isbn"));
-						status_item.setSalesId(rs.getString("sales_id"));
-						status_item.setShippingStatus(rs.getString("shipping_status"));
-						itemsList.add(status_item);
-					}
-					
-				}catch(Exception e) {
-					System.out.println(e);
-					throw new IllegalStateException(e);
-				}finally {
-					if( smt != null) {
-						try {smt.close();}catch(SQLException ignore) {}
-					}
-					if( con != null ) {
-						try {con.close();}catch(SQLException ignore) {}
-					}
-				}
-				return itemsList;
-			}
-			
-			// ログインしているユーザーと入金するユーザーが同じ時に商品情報の全て取得するメソッド
-			public ArrayList<StatusItem> selectUserIdAll(String user_id, String payment_status) {
-				
-				Connection con = null;
-				Statement smt = null;
-				
-				ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
-				
-				//			SQL文を文字列として定義
-				String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '" + user_id + "' AND payment_status = '" + payment_status + "'";
-				
-				try {
-					con = getConnection();
-					smt = con.createStatement();
-					
-					//			SQL文を発行し結果セットを取得
-					ResultSet rs = smt.executeQuery(sql);
-					
-					//商品データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
-					while(rs.next()) {
-						StatusItem status_item = new StatusItem();
-						status_item.setIsbn(rs.getString("isbn"));
-						status_item.setSalesId(rs.getString("sales_id"));
-						status_item.setPaymentStatus(rs.getString("payment_status"));
-						itemsList.add(status_item);
-					}
-					
-				}catch(Exception e) {
-					System.out.println(e);
-					throw new IllegalStateException(e);
-				}finally {
-					if( smt != null) {
-						try {smt.close();}catch(SQLException ignore) {}
-					}
-					if( con != null ) {
-						try {con.close();}catch(SQLException ignore) {}
-					}
-				}
-				return itemsList;
+	public ArrayList<StatusItem> selectShipUserIdAll(String user_id, String shipping_status) {
+
+		Connection con = null;
+		Statement smt = null;
+
+		ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+
+		//			SQL文を文字列として定義
+		String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '"
+				+ user_id + "' AND salesinfo.shipping_status = '" + shipping_status + "'";
+
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+
+			//			SQL文を発行し結果セットを取得
+			ResultSet rs = smt.executeQuery(sql);
+
+			//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+			while (rs.next()) {
+				StatusItem status_item = new StatusItem();
+				status_item.setIsbn(rs.getString("isbn"));
+				status_item.setSalesId(rs.getString("sales_id"));
+				status_item.setShippingStatus(rs.getString("shipping_status"));
+				itemsList.add(status_item);
 			}
 
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignore) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return itemsList;
+	}
+
+	// ログインしているユーザーが発送した商品情報を全て取得するメソッド
+	public ArrayList<StatusItem> selectItemShipUserAll(String user_id) {
+
+		Connection con = null;
+		Statement smt = null;
+
+		ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+
+		//			SQL文を文字列として定義
+		String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.user_id = '"
+				+ user_id + "'";
+
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+
+			//			SQL文を発行し結果セットを取得
+			ResultSet rs = smt.executeQuery(sql);
+
+			//			書籍データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+			while (rs.next()) {
+				StatusItem status_item = new StatusItem();
+				status_item.setIsbn(rs.getString("isbn"));
+				status_item.setSalesId(rs.getString("sales_id"));
+				status_item.setShippingStatus(rs.getString("shipping_status"));
+				itemsList.add(status_item);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignore) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return itemsList;
+	}
+
+	// ログインしているユーザーと入金するユーザーが同じ時に商品情報の全て取得するメソッド
+	public ArrayList<StatusItem> selectUserIdAll(String user_id, String payment_status) {
+
+		Connection con = null;
+		Statement smt = null;
+
+		ArrayList<StatusItem> itemsList = new ArrayList<StatusItem>();
+
+		//			SQL文を文字列として定義
+		String sql = "SELECT salesinfo.*, itemsinfo.* FROM `itemsinfo` INNER JOIN salesinfo on itemsinfo.isbn = salesinfo.isbn WHERE itemsinfo.buy_id = '"
+				+ user_id + "' AND payment_status = '" + payment_status + "'";
+
+		try {
+			con = getConnection();
+			smt = con.createStatement();
+
+			//			SQL文を発行し結果セットを取得
+			ResultSet rs = smt.executeQuery(sql);
+
+			//商品データを検索件数分全て取り出し、AllayListオブジェクトにBookオブジェクトとして格納
+			while (rs.next()) {
+				StatusItem status_item = new StatusItem();
+				status_item.setIsbn(rs.getString("isbn"));
+				status_item.setSalesId(rs.getString("item_name"));
+				status_item.setPaymentStatus(rs.getString("payment_status"));
+				itemsList.add(status_item);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new IllegalStateException(e);
+		} finally {
+			if (smt != null) {
+				try {
+					smt.close();
+				} catch (SQLException ignore) {
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignore) {
+				}
+			}
+		}
+		return itemsList;
+	}
 
 }
