@@ -20,11 +20,11 @@ User user = (User)session.getAttribute("user");
      		<%= error %><br><br>	
      		
      	<%
-     	if(cmd.equals("menu")){
+     	if(cmd == "menu"){
      	%>
      	<a href="<%=request.getContextPath() %>/view/menu.jsp">メニューへ戻る</a>
      	<%
-     	}else if(cmd.equals("list")){
+     	}else if(cmd == "list"){
      	%>
      	<a href="<%=request.getContextPath() %>/list">一覧表示に戻る</a>
      	<%

@@ -44,9 +44,9 @@ User user = (User) session.getAttribute("user");
 				<table class="list-table">
 					<thead>
 						<tr>
-							<th style="background-color:blue; width:250px">商品名</th>
-							<th style="background-color:blue; width:250px">種類</th>
-							<th style="background-color:blue; width:250px">価格</th>
+							<th style="background-color:#6666ff; width:250px">商品名</th>
+							<th style="background-color:#6666ff; width:250px">種類</th>
+							<th style="background-color:#6666ff; width:250px">価格</th>
 						</tr>
 					</thead>
 					<tbody>

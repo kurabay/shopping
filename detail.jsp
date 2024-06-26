@@ -1,69 +1,38 @@
 <%@page contentType="text/html; charset=UTF-8"%>
-<%@page import="bean.Items,util.MyFormat"%>
+<%@page import="bean.*,"%>
 <%
 	Items items = (Items) request.getAttribute("items");
-	MyFormat format = new MyFormat();
+    User user = (User) session.getAttribute("user");
+
 %>
 <html>
 	<head>
 	    <meta charset="UTF-8">
 	    <title>商品詳細画面</title>
 	    <link rel ="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
-<!-- 
-	    <style>
-	        .centered {
-	            text-align: center;
-	        }
-	
-	        .container {
-	            display: flex;
-	            justify-content: center;
-	            align-items: flex-start;
-	            margin-top: 20px;
-	        }
-	
-	        .image-and-button {
-	            display: flex;
-	            flex-direction: column;
-	            align-items: center;
-	        }
-	
-	        .image-and-button img {
-	            border: 2px solid black;
-	            padding: 10px;
-	        }
-	
-	        .button {
-	            margin-top: 20px; /* ボタンの上に余白を追加 */
-	        }
-	
-	        .details {
-	            margin-left: 20px;
-	        }
-	
-	        .product-details h3,
-	        .product-details h2 {
-	            margin: 10px 0;
-	        }
-	
-	        .footer {
-	            margin-top: 50px;
-	        }
-	    </style>
-	</head>
- -->
 	<body>
-	    <h1 style="text-align:center">フリマサイト</h1>
-	    <hr style="text-align:center; height:5px; background-color:blue">
-	
-	    <div class="centered">
-	    	<ul>
-	    	<li><a href ="<%=request.getContextPath()%>/view/menu.jsp" >[メニュー]</a></li>
-	    	<li><a href ="<%=request.getContextPath()%>/list">[商品一覧]</a></li>
-	    	</ul>
-	        <h2>商品詳細</h2>
-	        
-	    </div>
+	    <!--ヘッダー部分  -->
+			<%@ include file="/common/header.jsp" %>
+	    
+	    <div id="menu">
+				<div class="container">
+					<!-- ナビゲーション  -->
+					<div id="nav">
+						<ul>
+							<li><a href ="<%=request.getContextPath()%>/view/menu.jsp" >[メニュー]</a></li>
+	    					<li><a href ="<%=request.getContextPath()%>/list">[商品一覧]</a></li>
+						</ul>
+					</div>
+
+					<!-- ページタイトル -->
+					<div id="page_title">
+						<h2>商品詳細</h2>
+					</div>
+				</div>
+			</div>
+			<hr style="text-align:center; height:2px; background-color:blue">
+	    
+	    
 	    <div class="container">
 	        <div class="image-and-button">
 	            <img src="images/sample2.jpg" width="270px">
@@ -84,7 +53,7 @@
 	    <hr style="text-align:center; height:5px; background-color:blue; margin-top:350px;" class="footer">
 	    <table style="margin:auto; border:0; width:950px; text-align:left;">
 	        <tr>
-	            <td>ロゴ的なもの</td>
+	            <td>神田ITスクール</td>
 	        </tr>
 	    </table>
 	</body>
